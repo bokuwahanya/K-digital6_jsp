@@ -177,4 +177,40 @@ public class BoardDAO extends JDBConnect {
 		}
 		return result;
 	}
+	public List<BoardDTO> selectListPage(Map<String,Object>map){
+		List<BoardDTO> bbs =new Vector<BoardDTO>();
+		String query = "SELECT * FROM board";
+		if (map.get("searchWord")!=null) {
+			query += " WHERE " + map.get("searchField")+" "
+					+ " LIKE '%" + map.get("searchWord")+"%'";
+		
+	}
+		query += " where num between ? and ? "
+				+ "order by num desc;";
+		
+		try {
+			psmt = con.prepareStatement(query);
+			psmt.setString(1, map.get("start").toString());
+			psmt.setString(2, map.get("end").toString());
+			
+			rs = psmt.executeQuery();
+			
+			while(rs.next()) {
+				BoardDTO dto = new BoardDTO();
+				dto.setNum(rs.getString(1));
+				dto.setTitle(rs.getString(2));
+				dto.setContent(rs.getString("content"));
+				dto.setPostdate(rs.getDate("postdate"));
+				dto.setId(rs.getString("id"));
+				dto.setVisitcount(rs.getString("visitcount"));
+				
+				bbs.add(dto);
+			}	
+		}
+		catch(Exception e) {
+			System.out.println("게시물 조회 중 예외 발생");
+			e.printStackTrace();
+		}
+		return bbs;
+	}
 }

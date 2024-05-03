@@ -1,41 +1,32 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
-   
-<%! 
-public int dan(int a, int b){	
-	 return a * b;
-}
-	
-	
-%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
 <%
-	String a1 = request.getParameter("dan");
-	int a = 0;
-	int b = 0;
-	try{
-		a =Integer.parseInt(a1);
-	}catch (NumberFormatException e){
-		e.printStackTrace();
-	}
-	for(b = 1 ; b <= 9; b++){
-		dan(a,b);
-	}
-	
+    int dir = Integer.parseInt(request.getParameter("dir"));
 %>
-
-<% 
-for(b = 1; b <= 9; b++)
-{
-out.println(a + " * " + b + " = " + dan(a,b) + "<br/>"); 
-}
-%>
-
+<table border="1">
+<thead>
+<tr>
+<th>${dir}단</th>
+</tr>
+</thead>
+<tbody>
+<c:forEach var="i" begin="2" end="${dir}" >
+    <c:forEach var="j" begin="1" end="9">
+        <c:set var="result" value="${i * j}" />
+        <tr>
+            <td>${i} x ${j} = ${result}</td>
+        </tr>
+    </c:forEach>
+</c:forEach>
+</tbody>
+</table>
 </body>
 </html>
